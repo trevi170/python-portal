@@ -371,7 +371,7 @@ var weeks = [
   { week:3, title:"Hello World & Python Literals", due:"Feb 8, 2026", labs:[
     {num:1,name:"The print() Function",pts:14,url:"https://python-lab.ddns.net"},
     {num:2,name:"Formatting Output",pts:13.5,url:"https://python-lab.ddns.net/lab-02/"},
-    {num:3,name:"Python Literals – Numbers",pts:13.5,url:"#"},
+    {num:3,name:"Formatting the Output",pts:13.5,url:"https://python-lab.ddns.net/lab-03/"},
     {num:4,name:"String Mastery",pts:13.5,url:"#"}
   ]},
   { week:4, title:"Arithmetic, Variables & Comments", due:"Feb 15, 2026", labs:[
@@ -771,7 +771,7 @@ async function exportTeacherProgress() {
     if (s) allStudents = allStudents.concat(s);
   }
   if (allStudents.length === 0) { alert('No students in your sections.'); return; }
-  var labNames = {1:'The print() Function',2:'Formatting Output',3:'Python Literals – Numbers',4:'String Mastery',5:'Arithmetic Operators',6:'Operator Hierarchy',7:'Variables',8:'Comments',9:'The input() Function',10:'String Operators',11:'Mixed Operations',12:'Comparison Operators',13:'if Statements',14:'if-else Statements',15:'elif Chains',16:'while Loops',17:'for Loops',18:'break Statement',19:'continue Statement',20:'Nested Loops',21:'Loop Patterns',22:'Loop Practice',23:'Logic & Bit Operations',24:'Python Lists',25:'Sorting & Arrays',26:'Defining Functions',27:'Function Parameters',28:'Returning Results',29:'Functions & Scopes',30:'Tuples & Dictionaries'};
+  var labNames = {1:'The print() Function',2:'Formatting Output',3:'Formatting the Output',4:'String Mastery',5:'Arithmetic Operators',6:'Operator Hierarchy',7:'Variables',8:'Comments',9:'The input() Function',10:'String Operators',11:'Mixed Operations',12:'Comparison Operators',13:'if Statements',14:'if-else Statements',15:'elif Chains',16:'while Loops',17:'for Loops',18:'break Statement',19:'continue Statement',20:'Nested Loops',21:'Loop Patterns',22:'Loop Practice',23:'Logic & Bit Operations',24:'Python Lists',25:'Sorting & Arrays',26:'Defining Functions',27:'Function Parameters',28:'Returning Results',29:'Functions & Scopes',30:'Tuples & Dictionaries'};
   var rows = [['Student ID','Student Name','Section','Lab #','Lab Name','Points','Completed Date']];
   for (var i=0;i<allStudents.length;i++) {
     var st = allStudents[i];
@@ -827,7 +827,7 @@ async function exportProgress() {
   var students = await db('students','GET');
   var progress = await db('lab_progress','GET',null,'?completed=eq.true&order=student_id.asc,lab_num.asc');
   if (!progress || progress.length === 0) { alert('No progress data found.'); return; }
-  var labNames = {1:'The print() Function',2:'Formatting Output',3:'Python Literals – Numbers',4:'String Mastery',5:'Arithmetic Operators',6:'Operator Hierarchy',7:'Variables',8:'Comments',9:'The input() Function',10:'String Operators',11:'Mixed Operations',12:'Comparison Operators',13:'if Statements',14:'if-else Statements',15:'elif Chains',16:'while Loops',17:'for Loops',18:'break Statement',19:'continue Statement',20:'Nested Loops',21:'Loop Patterns',22:'Loop Practice',23:'Logic & Bit Operations',24:'Python Lists',25:'Sorting & Arrays',26:'Defining Functions',27:'Function Parameters',28:'Returning Results',29:'Functions & Scopes',30:'Tuples & Dictionaries'};
+  var labNames = {1:'The print() Function',2:'Formatting Output',3:'Formatting the Output',4:'String Mastery',5:'Arithmetic Operators',6:'Operator Hierarchy',7:'Variables',8:'Comments',9:'The input() Function',10:'String Operators',11:'Mixed Operations',12:'Comparison Operators',13:'if Statements',14:'if-else Statements',15:'elif Chains',16:'while Loops',17:'for Loops',18:'break Statement',19:'continue Statement',20:'Nested Loops',21:'Loop Patterns',22:'Loop Practice',23:'Logic & Bit Operations',24:'Python Lists',25:'Sorting & Arrays',26:'Defining Functions',27:'Function Parameters',28:'Returning Results',29:'Functions & Scopes',30:'Tuples & Dictionaries'};
   var rows = [['Student ID','Student Name','Lab #','Lab Name','Points','Completed Date']];
   progress.forEach(function(p){
     var st = students ? students.find(function(x){return x.student_id===p.student_id;}) : null;
