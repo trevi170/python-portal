@@ -584,10 +584,17 @@ async function showStudentDash() {
       '<div style="font-size:11px;color:#6c7086;white-space:nowrap;">'+wDone+'/'+w.labs.length+'</div>' +
       '<div class="week-due">Due '+w.due+'</div></div><div class="labs-grid">';
     w.labs.forEach(function(l) {
-      var done = progressMap[l.num] && progressMap[l.num].completed;
+      var labProgress = progressMap[l.num];
+      var done = labProgress && labProgress.completed;
+      var partialPoints = labProgress && !done ? parseFloat(labProgress.points || 0) : 0;
+      var inProgress = partialPoints > 0;
       var avail = l.url !== '#';
       var cls = 'lab-card'+(done?' done':'')+((!avail&&!done)?' locked':'');
-      var status = done?'<div class="lab-status s-done">✓ Completed — click to reopen</div>':(avail?'<div class="lab-status s-active">● Available</div>':'<div class="lab-status s-pending">○ Coming soon</div>');
+      var status = done
+        ? '<div class="lab-status s-done">✓ Completed — click to reopen</div>'
+        : inProgress
+          ? '<div class="lab-status s-active">◐ In progress — '+partialPoints+'/'+l.pts+' points</div>'
+          : (avail?'<div class="lab-status s-active">● Available</div>':'<div class="lab-status s-pending">○ Coming soon</div>');
       var click = avail ? 'onclick="openLab('+l.num+',\''+l.url+'\','+l.pts+')"' : '';
       html += '<div class="'+cls+'" '+click+'><div class="lab-num">Lab '+l.num+'</div><div class="lab-name">'+l.name+'</div><div class="lab-pts">'+l.pts+' pts</div>'+status+'</div>';
     });
