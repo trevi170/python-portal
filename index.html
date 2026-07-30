@@ -965,7 +965,10 @@ async function resetStudentProgress(studentId) {
     return;
   }
 
-  alert('Progress reset for student ' + studentId + '. Their account is still active.');
+  alert(
+    'Progress reset for student ' + studentId + '. Their account is still active.\n\n' +
+    'Any saved editor code will clear when the student reopens or refreshes the lab.'
+  );
   loadAdminData();
 }
 
