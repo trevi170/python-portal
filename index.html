@@ -740,7 +740,7 @@ async function loadAdminData() {
       var pct = pts/400*100;
       var grade = done===0?'—':pct>=90?'A':pct>=80?'B':pct>=70?'C':'F';
       var secOptions = sections ? sections.map(function(s){ return '<option value="'+s.id+'"'+(sec&&sec.id===s.id?' selected':'')+'>'+s.section_code+'</option>'; }).join('') : '';
-      strows += '<tr><td>'+st.student_id+'</td><td><input type="text" value="'+(st.name||'')+'" placeholder="Enter name" onblur="updateStudentName(\''+st.student_id+'\',this.value)" style="background:#2e3440;border:1px solid #3d4455;border-radius:5px;padding:3px 8px;color:#cdd6f4;font-size:11px;width:140px;outline:none;"></td><td>'+(sec?'<span class="badge badge-blue">'+sec.section_code+'</span>':'<span class="badge badge-gray">Unassigned</span>')+'</td><td>'+done+'/30</td><td>'+pts.toFixed(1)+'</td><td>'+grade+'</td><td style="display:flex;gap:6px;align-items:center;"><select onchange="assignSection(\''+st.student_id+'\',this.value)" style="background:#2e3440;border:1px solid #3d4455;border-radius:5px;padding:3px 6px;color:#cdd6f4;font-size:11px;cursor:pointer;"><option value="">Assign...</option>'+secOptions+'</select><button onclick="deleteStudent(\''+st.student_id+'\')" style="background:#f38ba822;border:1px solid #f38ba844;border-radius:5px;padding:3px 8px;color:#f38ba8;font-size:11px;cursor:pointer;">&#10005;</button></td></tr>';
+      strows += '<tr><td>'+st.student_id+'</td><td><input type="text" value="'+(st.name||'')+'" placeholder="Enter name" onblur="updateStudentName(\''+st.student_id+'\',this.value)" style="background:#2e3440;border:1px solid #3d4455;border-radius:5px;padding:3px 8px;color:#cdd6f4;font-size:11px;width:140px;outline:none;"></td><td>'+(sec?'<span class="badge badge-blue">'+sec.section_code+'</span>':'<span class="badge badge-gray">Unassigned</span>')+'</td><td>'+done+'/30</td><td>'+pts.toFixed(1)+'</td><td>'+grade+'</td><td style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><select onchange="assignSection(\''+st.student_id+'\',this.value)" style="background:#2e3440;border:1px solid #3d4455;border-radius:5px;padding:3px 6px;color:#cdd6f4;font-size:11px;cursor:pointer;"><option value="">Assign...</option>'+secOptions+'</select><button onclick="resetStudentProgress(\''+st.student_id+'\')" title="Delete all lab progress but keep the student account" style="background:#f9e2af22;border:1px solid #f9e2af55;border-radius:5px;padding:3px 8px;color:#f9e2af;font-size:11px;cursor:pointer;">Reset progress</button><button onclick="deleteStudent(\''+st.student_id+'\')" title="Delete student and all progress" style="background:#f38ba822;border:1px solid #f38ba844;border-radius:5px;padding:3px 8px;color:#f38ba8;font-size:11px;cursor:pointer;">&#10005;</button></td></tr>';
       stbody.innerHTML = strows;
     }
   }
@@ -948,6 +948,24 @@ async function deleteStudent(studentId) {
   if (!confirm('Remove student ' + studentId + '? This will also delete their lab progress.')) return;
   await db('lab_progress','DELETE',null,'?student_id=eq.'+studentId);
   await db('students','DELETE',null,'?student_id=eq.'+studentId);
+  loadAdminData();
+}
+
+async function resetStudentProgress(studentId) {
+  var confirmed = confirm(
+    'Reset all progress for student ' + studentId + '?\n\n' +
+    'This deletes every saved lab score and completion for this student. ' +
+    'Their account, name, and section will remain. This cannot be undone.'
+  );
+  if (!confirmed) return;
+
+  var result = await db('lab_progress','DELETE',null,'?student_id=eq.'+encodeURIComponent(studentId));
+  if (result === null) {
+    alert(dbLastError || 'Could not reset this student’s progress.');
+    return;
+  }
+
+  alert('Progress reset for student ' + studentId + '. Their account is still active.');
   loadAdminData();
 }
 
